@@ -19,6 +19,8 @@ import JoinFamilyScreen from './screens/familyScreens/JoinFamily';
 import CreateProfileScreen from './screens/profileScreens/CreateProfile';
 import EditProfileScreen from './screens/profileScreens/EditProfile';
 import ViewProfileScreen from './screens/profileScreens/ViewProfile';
+import LogIn from './screens/LogIn';
+import EditAppointments from './screens/EditAppointments';
 
 const Stack = createStackNavigator();
 
@@ -26,25 +28,29 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName='Welcome'>
+        <Stack.Navigator initialRouteName='Log Ind'>
 
-        <Stack.Screen name="Welcome" component={HomeScreen}/>
+        <Stack.Screen name="Log Ind" component={LogIn} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="Economy" component={EconomyScreen}/>
+        <Stack.Screen name="Welcome" component={HomeScreen} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="Timeplan" component={TimeScreen}/>
+        <Stack.Screen name="Economy" component={EconomyScreen} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="Create a family" component={CreateFamilyScreen}/>
+        <Stack.Screen name="Timeplan" component={TimeScreen} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="Your family" component={FamilyScreen}/>
+        <Stack.Screen name="Edit Appointments" component={EditAppointments} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="Join a family" component={JoinFamilyScreen}/>
+        <Stack.Screen name="Create a family" component={CreateFamilyScreen} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="Create profile" component={CreateProfileScreen}/>
+        <Stack.Screen name="Your family" component={FamilyScreen} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="Edit profile" component={EditProfileScreen}/>
+        <Stack.Screen name="Join a family" component={JoinFamilyScreen} options={{ headerShown: false }}/>
 
-        <Stack.Screen name="View profile" component={ViewProfileScreen}/>
+        <Stack.Screen name="Create profile" component={CreateProfileScreen} options={{ headerShown: false }}/>
+
+        <Stack.Screen name="Edit profile" component={EditProfileScreen} options={{ headerShown: false }}/>
+
+        <Stack.Screen name="View profile" component={ViewProfileScreen} options={{ headerShown: false }}/>
         
       </Stack.Navigator>
     </NavigationContainer>

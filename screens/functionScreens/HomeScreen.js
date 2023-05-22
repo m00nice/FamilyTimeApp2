@@ -107,7 +107,7 @@ function Menu({ navigation }) {
             >
         <View style={styles.container}>
             
-            <ProfileButton imageURL={"./Matt_CPU.jpg"}>
+            <ProfileButton imageURL={'Matt_CPU.jpg'}>
                 
             </ProfileButton>
 

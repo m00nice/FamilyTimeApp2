@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Button, View, StyleSheet, TouchableOpacity, Text, FlatList, Image } from 'react-native';
 import { getISOWeek, setISODay } from 'date-fns';
-
-
+import { database, storage } from '../../config/firebase';
+import { onSnapshot, query} from 'firebase/firestore';
+import {doc, setDoc, addDoc, getDoc, updateDoc, collection, getDocs, deleteField, FieldValue, Timestamp} from 'firebase/firestore'
+import 'firebase/firestore';
 
 function TimeScreen({ navigation, route }) {
   /*
@@ -19,7 +21,8 @@ function TimeScreen({ navigation, route }) {
 
   },[displayDay])
 */
-
+    const [appointments, setAppointments] = useState([])
+    
     const [today, setToday] = useState(new Date())
     const [thisWeek, setThisWeek] = useState(getISOWeek(new Date()))
 
@@ -41,6 +44,69 @@ function TimeScreen({ navigation, route }) {
       return () => clearInterval(interval);
     },)
 
+    useEffect(() => {
+      const docRef = doc(database, "Users", "vMUxCNUEnHwW8XDsGgkO")
+      
+      const getAppointments = async () => {
+      try{
+        const docSnapshot = await getDoc(docRef)
+
+        const currentArray = docSnapshot.get('appointments')
+
+        const entries = Object.entries(currentArray)
+
+        const filteredArray = entries.filter(([key, value]) => {
+          
+          const startDate = value[1]
+          
+          
+          const formattedStartDate = startDate instanceof Timestamp ? startDate.toDate() : startDate
+          
+
+          return formattedStartDate.getDate() === displayDay.getDate();
+        })
+        
+
+        const sortedArray = filteredArray.sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
+        setAppointments(sortedArray)
+        
+        
+      }catch(error){
+        console.error("error fetching appointments",error);
+      }
+    }
+    getAppointments();
+
+  },[displayDay])
+
+    const renderAppointments = () => {
+      let counter = 0;
+      return appointments.map(([key, value]) => { 
+        const title = value[0]
+        const start = new Date(value[1].seconds * 1000 + Math.floor(value[1].nanoseconds/1000000))
+        console.log(value[1])
+        const end = new Date(value[2].seconds * 1000 + Math.floor(value[2].nanoseconds/1000000))
+        const topHours = start.getHours()
+        const topMinutes = start.getMinutes();
+        console.log(topMinutes)
+        const topPos =  topHours*60+topMinutes 
+        console.log(topPos)
+        const botHours = end.getHours()
+        const botMinutes = end.getMinutes();
+        const botPos = (botHours*60+botMinutes)-topPos
+        console.log(botPos)
+        counter += 60;
+        if (counter > 240) {
+        counter = 0;
+        }
+        return (
+          <View key={key} style={{ top: topPos, height: botPos, backgroundColor: "blue", position: "absolute", width: 60, right: counter, zIndex: 1,}}>
+            <Text>{title}</Text>
+            <Text>{start.toLocaleTimeString()} to {end.toLocaleTimeString()}</Text>
+          </View>
+          )
+      })
+    }
 
     const dayButton = (number) => {
       const day = displayDay.getDay();
@@ -72,26 +138,6 @@ function TimeScreen({ navigation, route }) {
     const handleDataFromFirebase = () => {
       //
       //
-    }
-
-
-
-    const appointmentComp = (name, title, startDate, endDate, id, color) => {
-      //convert startDate to top
-      //convert endDate to height
-      name = "yo"
-      title = "yo"
-      startDate = "yo"
-      endDate = "yo"
-      const newAppointment = (
-      <View id={id} style={{top: 0, right: 0, height: 500, backgroundColor: {color}, position: "absolute", width: 60, right: 100, zIndex: 1,}}>
-        <Text>{name}</Text>
-        <Text>{title}</Text>
-        <Text>{startDate} to {endDate}</Text>
-      </View>
-      )
-
-      SetAppointment(prevAppointments => [... prevAppointments, newAppointment]);
     }
 
     const addProfile = (id, name, color) => {
@@ -204,7 +250,7 @@ function TimeScreen({ navigation, route }) {
 
                     <Text style={styles.hourMark}>23 - 00</Text>
                     <View style={{top: 0, right: "0%", height: "91.15%", position: "absolute", width: "85%", zIndex: 1,}}>
-                          {Appointment.map(appointment => appointment)}
+                          {renderAppointments()}
                     </View>
                     
                     

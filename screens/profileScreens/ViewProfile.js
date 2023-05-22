@@ -6,6 +6,12 @@ import React, { Component, useState } from 'react'
 
 function ViewProfile({ navigation, route }) {
 
+  const [name, setName] = useState('Name Nameson')
+  const [colour, setColour] = useState('Blue')
+  const [gender, setGender] = useState('Mand')
+  const [age, setAge] = useState('23')
+  
+
     const drawer = React.useRef(null);
 
     const openDrawer = () => {
@@ -29,8 +35,8 @@ function ViewProfile({ navigation, route }) {
         );
       };
 
-      const ProfileButton = ({imageURL}) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Edit profile')} style={{position: "absolute", top: 40, width: 300, height: 300, borderRadius: 300, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#000',
+      const ProfileButton = ({imageURL}) => {
+        return (<TouchableOpacity onPress={() => navigation.navigate('Edit profile')} style={{position: "absolute", top: 40, width: 300, height: 300, borderRadius: 300, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#000',
             shadowOffset: {
               width: 0,
               height: 2,
@@ -42,8 +48,8 @@ function ViewProfile({ navigation, route }) {
                 style={{width: 50, height: 50, borderRadius: 25,}}
                 source={imageURL}
                 />
-        </TouchableOpacity>
-    );
+        </TouchableOpacity>)
+    };
 
 
       return (
@@ -58,10 +64,10 @@ function ViewProfile({ navigation, route }) {
                 
         </ProfileButton>
         <View style={styles.container2}>
-        <Text style={styles.name}>Your Name</Text>
-        <Text>Køn: </Text>
-        <Text>Alder: </Text>
-        <Text>Color</Text>
+        <Text style={styles.name}>{name}</Text>
+        <Text>Køn: {gender}</Text>
+        <Text>Alder: {age}</Text>
+        <Text>Color: {colour}</Text>
         <Button title='Dine Planer' onPress={() => navigation.navigate('Edit Appointments')}></Button>
         <Button title='Din Familie'></Button>
         <Button title='Dit Familie Træ'></Button>
